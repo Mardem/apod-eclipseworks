@@ -46,8 +46,8 @@ dependencies:
   shimmer: 3.0.0
   easy_image_viewer: 1.5.1
   bottom_picker: 2.11.2
-  lucide_icons_flutter: ^1.2.9
-
+  lucide_icons_flutter: 1.2.9
+  animated_bottom_navigation_bar: 1.4.0
   mocktail: ^1.0.4
 
 dev_dependencies:

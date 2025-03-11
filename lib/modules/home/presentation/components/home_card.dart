@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eclipseworks_apod/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class HomeImageCard extends StatelessWidget {
   final String imageUrl;
@@ -35,23 +37,77 @@ class HomeImageCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(20)),
-            child: CachedNetworkImage(
-              imageUrl: imageUrl,
-              placeholder: (context, url) => Container(
-                color: Colors.grey[300],
-                child: const Center(child: CircularProgressIndicator()),
-              ),
-              errorWidget: (context, url, error) => Container(
-                color: Colors.grey,
-                child: const Icon(Icons.error, color: Colors.red),
-              ),
+            child: Stack(
+              children: [
+                CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  placeholder: (context, url) => Container(
+                    color: Colors.grey[300],
+                    child: const Center(child: CircularProgressIndicator()),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    color: Colors.grey,
+                    child: const Icon(Icons.error, color: Colors.red),
+                  ),
+                ),
+                Positioned(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 200,
+                    color: Colors.black.withOpacity(.2),
+                    child: Icon(
+                      LucideIcons.zoomIn,
+                      color: Colors.grey.shade200,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            'NGC 1499: The California Nebula',
-            style: GoogleFonts.playfair(
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.all(4),
+            child: Column(
+              children: [
+                Text(
+                  'NGC 1499: The California Nebula',
+                  style: GoogleFonts.playfair(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Icon(
+                      LucideIcons.userRound,
+                      color: AppColors.blue,
+                      size: 14,
+                    ),
+                    Text(
+                      'Toni Fabiani Mendez',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: AppColors.darkGrey,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      LucideIcons.calendarFold,
+                      color: AppColors.blue,
+                      size: 14,
+                    ),
+                    Text(
+                      '10/03/2025',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: AppColors.darkGrey,
+                      ),
+                    )
+                  ],
+                ),
+              ],
             ),
           )
         ],
