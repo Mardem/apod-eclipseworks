@@ -10,7 +10,7 @@ class HomeServiceImpl implements HomeService {
   final HttpClient _client = inject<HttpClient>();
 
   @override
-  Future<AppResponse<ApodMapper?>> getApod() async {
+  Future<AppResponse<ApodModel?>> getApod() async {
     try {
       Response<Map<String, dynamic>> result = await _client.get(
         '/planetary/apod',
@@ -18,7 +18,7 @@ class HomeServiceImpl implements HomeService {
 
       return AppResponse(
         success: true,
-        response: ApodMapper.fromJson(result.data!),
+        response: ApodModel.fromJson(result.data!),
       );
     } catch (e) {
       throw Exception('Houve um problema ao buscar os dados da imagem!');

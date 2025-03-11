@@ -11,10 +11,10 @@ class ImageViewComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ApodMapper>(
+    return StreamBuilder<ApodModel>(
       stream: viewModel.apod,
-      builder: (BuildContext context, AsyncSnapshot<ApodMapper> snapshot) {
-        final ApodMapper? apod = snapshot.data;
+      builder: (BuildContext context, AsyncSnapshot<ApodModel> snapshot) {
+        final ApodModel? apod = snapshot.data;
 
         if (apod == null) {
           return const SizedBox.shrink();

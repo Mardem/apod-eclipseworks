@@ -1,18 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
+import 'package:eclipseworks_apod/core/utils/toast_notification.dart';
+import 'package:eclipseworks_apod/main.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../../data/models/local/favorite_service.dart';
+import '../../data/models/remote/enums/apod_reaction.dart';
 import '../../data/models/remote/mapper/apod_mapper.dart';
 import 'home_modal_info.dart';
 
 class HomeBanner extends StatelessWidget {
-  const HomeBanner({
+  HomeBanner({
     super.key,
     required this.details,
   });
 
-  final ApodMapper details;
+  final ApodModel details;
+
+  final FavoriteService favoriteService = inject<FavoriteService>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +59,18 @@ class HomeBanner extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 GestureDetector(
-                  onTap: () {
-                    print('Heart');
+                  onTap: () async {
+                    ToastNotification.success(
+                      context: context,
+                      title: 'APOD adicionado a gostei!',
+                      icon: const Icon(LucideIcons.heart),
+                    );
+
+                    final ApodModel item = details.copyWith(
+                      reaction: ApodReaction.like,
+                    );
+
+                    await favoriteService.add(item: item);
                   },
                   child: const Icon(
                     LucideIcons.heart,
@@ -64,8 +80,18 @@ class HomeBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 GestureDetector(
-                  onTap: () {
-                    print('Crack');
+                  onTap: () async {
+                    ToastNotification.success(
+                      context: context,
+                      title: 'APOD adicionado a não gostei!',
+                      icon: const Icon(LucideIcons.heartCrack),
+                    );
+
+                    final ApodModel item = details.copyWith(
+                      reaction: ApodReaction.unlike,
+                    );
+
+                    await favoriteService.add(item: item);
                   },
                   child: const Icon(
                     LucideIcons.heartCrack,

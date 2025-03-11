@@ -1,3 +1,6 @@
+import 'package:eclipseworks_apod/modules/home/data/local/favorite_service.dart';
+import 'package:eclipseworks_apod/modules/home/data/models/local/favorite_service.dart';
+
 import '../../../main.dart';
 import '../data/home_repository.dart';
 import '../data/models/remote/repository/home_repository.dart';
@@ -8,6 +11,7 @@ import '../vm/home_viewmodel.dart';
 void startHomeModule() {
   /// Services
   inject.registerFactory<HomeService>(() => HomeServiceImpl());
+  inject.registerFactory<FavoriteService>(() => FavoriteServiceImpl());
 
   /// Repositories
   inject.registerFactory<HomeRepository>(() => HomeRepositoryImpl());

@@ -1,0 +1,1 @@
+enum ApodMediaType { image, video }

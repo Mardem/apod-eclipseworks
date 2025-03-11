@@ -9,7 +9,7 @@ class HomeRepositoryImpl implements HomeRepository {
   final HomeService _service = inject<HomeService>();
 
   @override
-  Future<AppResponse<ApodMapper?>> getApod() async {
+  Future<AppResponse<ApodModel?>> getApod() async {
     try {
       return await _service.getApod();
     } catch (e) {

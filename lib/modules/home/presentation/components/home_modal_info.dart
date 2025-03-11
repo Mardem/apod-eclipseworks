@@ -9,7 +9,7 @@ import '../../data/models/remote/mapper/apod_mapper.dart';
 class HomeModalInfo extends StatelessWidget {
   const HomeModalInfo({super.key, required this.details});
 
-  final ApodMapper details;
+  final ApodModel details;
 
   @override
   Widget build(BuildContext context) {

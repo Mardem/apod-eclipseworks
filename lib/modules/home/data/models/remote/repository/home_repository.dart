@@ -3,5 +3,5 @@ import 'package:eclipseworks_apod/modules/home/data/models/remote/mapper/apod_ma
 import '../response/app_response.dart';
 
 abstract interface class HomeRepository {
-  Future<AppResponse<ApodMapper?>> getApod();
+  Future<AppResponse<ApodModel?>> getApod();
 }

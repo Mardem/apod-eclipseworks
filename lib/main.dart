@@ -10,10 +10,10 @@ import 'modules/home/home.dart';
 final GetIt inject = GetIt.instance;
 final Logger logger = Logger();
 
-void main() {
+main() async {
   Intl.defaultLocale = 'pt_BR';
-
-  startModules();
+  WidgetsFlutterBinding.ensureInitialized();
+  await startModules();
   runApp(const App());
 }
 

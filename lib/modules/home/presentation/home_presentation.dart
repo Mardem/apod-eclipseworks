@@ -83,11 +83,11 @@ class _HomePresentationState extends State<HomePresentation> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              StreamBuilder<ApodMapper>(
+              StreamBuilder<ApodModel>(
                 stream: viewModel.apod,
                 builder: (
                   BuildContext context,
-                  AsyncSnapshot<ApodMapper> snapshot,
+                  AsyncSnapshot<ApodModel> snapshot,
                 ) {
                   if (!snapshot.hasData) {
                     return const CircularProgressIndicator();

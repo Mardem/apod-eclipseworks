@@ -49,6 +49,8 @@ dependencies:
   lucide_icons_flutter: 1.2.9
   animated_bottom_navigation_bar: 1.4.0
   mocktail: ^1.0.4
+  shared_preferences: 2.2.2
+  toastification: 2.3.0
 
 dev_dependencies:
   flutter_test:
