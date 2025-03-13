@@ -3,6 +3,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../core/vm/base_view_model.dart';
 import '../../../main.dart';
+import '../data/models/local/favorite_service.dart';
 import '../data/models/remote/mapper/apod_mapper.dart';
 import '../data/models/remote/repository/home_repository.dart';
 
@@ -14,13 +15,20 @@ class HomeViewModel extends BaseViewModel {
   void setApod(ApodModel value) => _apod.add(value);
 
   final HomeRepository repository = inject<HomeRepository>();
+  final FavoriteService favoriteService = inject<FavoriteService>();
 
-  Future<void> loadApod() async {
+  Future<void> loadApod({Map<String, dynamic>? parameters}) async {
     setLoading(true);
-    final AppResponse<ApodModel?> request = await repository.getApod();
+    final AppResponse<ApodModel?> request = await repository.getApod(
+      queryParameters: parameters,
+    );
 
     setApod(request.response!);
 
     setLoading(false);
   }
+
+  Future<void> add({required ApodModel item}) async => favoriteService.add(
+        item: item,
+      );
 }

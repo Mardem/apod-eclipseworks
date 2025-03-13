@@ -10,10 +10,13 @@ class HomeServiceImpl implements HomeService {
   final HttpClient _client = inject<HttpClient>();
 
   @override
-  Future<AppResponse<ApodModel?>> getApod() async {
+  Future<AppResponse<ApodModel?>> getApod({
+    Map<String, dynamic>? queryParameters,
+  }) async {
     try {
       Response<Map<String, dynamic>> result = await _client.get(
         '/planetary/apod',
+        queryParameters: queryParameters,
       );
 
       return AppResponse(

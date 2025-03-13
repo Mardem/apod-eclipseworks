@@ -7,12 +7,14 @@ import '../models/remote/mapper/apod_mapper.dart';
 class FavoriteServiceImpl implements FavoriteService {
   final LocalStorage localStorage = inject<LocalStorage>();
 
+  String localStorageKey = 'favorite_banners';
+
   @override
   Future<bool> add({
     required ApodModel item,
   }) async {
     final List<Map<String, dynamic>>? data = await localStorage.getJsonList(
-      key: 'favorite_banners',
+      key: localStorageKey,
     );
 
     final List<Map<String, dynamic>> favoriteList = data ?? [];
@@ -24,7 +26,7 @@ class FavoriteServiceImpl implements FavoriteService {
     if (!exists) {
       favoriteList.add(item.toJson());
       await localStorage.setJsonList(
-        key: 'favorite_banners',
+        key: localStorageKey,
         content: favoriteList,
       );
     }
@@ -35,7 +37,7 @@ class FavoriteServiceImpl implements FavoriteService {
   @override
   Future<List<Map<String, dynamic>>?> getFavorites() async {
     final List<Map<String, dynamic>>? data = await localStorage.getJsonList(
-      key: 'favorite_banners',
+      key: localStorageKey,
     );
 
     return data;
@@ -43,4 +45,20 @@ class FavoriteServiceImpl implements FavoriteService {
 
   @override
   Future<bool> clear() async => localStorage.clear();
+
+  @override
+  Future<bool> addList({required List<ApodModel> items}) async {
+    final List<Map<String, dynamic>> formatted = items.map(
+      (ApodModel item) {
+        return item.toJson();
+      },
+    ).toList();
+
+    await localStorage.setJsonList(
+      key: localStorageKey,
+      content: formatted,
+    );
+
+    return true;
+  }
 }

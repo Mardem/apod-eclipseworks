@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppInput extends StatelessWidget {
-  const AppInput({super.key});
+  const AppInput({super.key, this.hintText});
+
+  final String? hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class AppInput extends StatelessWidget {
         hintStyle: const TextStyle(
           color: Color.fromRGBO(159, 159, 159, 1.0),
         ),
-        hintText: 'Selecione uma data',
+        hintText: hintText,
       ),
     );
   }

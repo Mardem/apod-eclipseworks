@@ -1,24 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:eclipseworks_apod/core/utils/toast_notification.dart';
-import 'package:eclipseworks_apod/main.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../data/models/local/favorite_service.dart';
 import '../../data/models/remote/enums/apod_reaction.dart';
 import '../../data/models/remote/mapper/apod_mapper.dart';
+import '../../vm/home_viewmodel.dart';
 import 'home_modal_info.dart';
 
 class HomeBanner extends StatelessWidget {
-  HomeBanner({
+  const HomeBanner({
     super.key,
     required this.details,
+    required this.viewModel,
+    this.onAddCallback,
   });
 
   final ApodModel details;
-
-  final FavoriteService favoriteService = inject<FavoriteService>();
+  final HomeViewModel viewModel;
+  final VoidCallback? onAddCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,11 @@ class HomeBanner extends StatelessWidget {
                       reaction: ApodReaction.like,
                     );
 
-                    await favoriteService.add(item: item);
+                    if (onAddCallback != null) {
+                      onAddCallback!();
+                    }
+
+                    await viewModel.add(item: item);
                   },
                   child: const Icon(
                     LucideIcons.heart,
@@ -91,7 +96,11 @@ class HomeBanner extends StatelessWidget {
                       reaction: ApodReaction.unlike,
                     );
 
-                    await favoriteService.add(item: item);
+                    if (onAddCallback != null) {
+                      onAddCallback!();
+                    }
+
+                    await viewModel.add(item: item);
                   },
                   child: const Icon(
                     LucideIcons.heartCrack,

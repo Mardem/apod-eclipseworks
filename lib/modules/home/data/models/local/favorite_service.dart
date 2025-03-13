@@ -6,4 +6,6 @@ abstract class FavoriteService {
   Future<List<Map<String, dynamic>>?> getFavorites();
 
   Future<bool> clear();
+
+  Future<bool> addList({required List<ApodModel> items});
 }

@@ -5,10 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../../core/utils/date_time.dart';
-import '../../data/models/remote/mapper/apod_mapper.dart';
+import '../../../home/data/models/remote/mapper/apod_mapper.dart';
 
-class HomeModalInfo extends StatelessWidget {
-  const HomeModalInfo({super.key, required this.details});
+class FavoriteModalInfo extends StatelessWidget {
+  const FavoriteModalInfo({super.key, required this.details});
 
   final ApodModel details;
 
