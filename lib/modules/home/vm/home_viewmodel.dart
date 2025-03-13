@@ -3,7 +3,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../core/vm/base_view_model.dart';
 import '../../../main.dart';
-import '../data/models/local/favorite_service.dart';
+import '../../favorites/data/models/local/favorite_service.dart';
 import '../data/models/remote/mapper/apod_mapper.dart';
 import '../data/models/remote/repository/home_repository.dart';
 

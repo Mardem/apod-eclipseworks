@@ -1,8 +1,8 @@
 import 'package:eclipseworks_apod/main.dart';
 
 import '../../../../core/services/local/localstorage/data/local_storage.dart';
+import '../../../home/data/models/remote/mapper/apod_mapper.dart';
 import '../models/local/favorite_service.dart';
-import '../models/remote/mapper/apod_mapper.dart';
 
 class FavoriteServiceImpl implements FavoriteService {
   final LocalStorage localStorage = inject<LocalStorage>();

@@ -3,9 +3,9 @@ import 'package:eclipseworks_apod/main.dart';
 import 'package:eclipseworks_apod/modules/home/data/models/remote/mapper/apod_mapper.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../home/data/models/local/favorite_service.dart';
 import '../../home/data/models/remote/enums/apod_reaction.dart';
 import '../../home/presentation/utils/home_chip_model.dart';
+import '../data/models/local/favorite_service.dart';
 
 class FavoritesViewmodel extends BaseViewModel {
   final FavoriteService favoriteService = inject<FavoriteService>();
