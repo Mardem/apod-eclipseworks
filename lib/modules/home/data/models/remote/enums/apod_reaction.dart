@@ -1,6 +1,7 @@
 enum ApodReaction {
   like,
-  unlike;
+  unlike,
+  all;
 
   String get name {
     switch (this) {
@@ -8,6 +9,8 @@ enum ApodReaction {
         return 'like';
       case ApodReaction.unlike:
         return 'unlike';
+      case ApodReaction.all:
+        return 'all';
     }
   }
 }

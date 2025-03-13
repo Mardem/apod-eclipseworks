@@ -61,21 +61,29 @@ class HomeBanner extends StatelessWidget {
               children: <Widget>[
                 GestureDetector(
                   onTap: () async {
-                    ToastNotification.success(
-                      context: context,
-                      title: 'APOD adicionado a gostei!',
-                      icon: const Icon(LucideIcons.heart),
-                    );
-
                     final ApodModel item = details.copyWith(
                       reaction: ApodReaction.like,
                     );
+
+                    final bool status = await viewModel.add(item: item);
 
                     if (onAddCallback != null) {
                       onAddCallback!();
                     }
 
-                    await viewModel.add(item: item);
+                    if (status) {
+                      ToastNotification.success(
+                        context: context,
+                        title: 'APOD adicionado a gostei!',
+                        icon: const Icon(LucideIcons.heart),
+                      );
+                    } else {
+                      ToastNotification.error(
+                        context: context,
+                        title: 'Já existente nos favoritos!',
+                        icon: const Icon(LucideIcons.info),
+                      );
+                    }
                   },
                   child: const Icon(
                     LucideIcons.heart,
@@ -86,12 +94,6 @@ class HomeBanner extends StatelessWidget {
                 const SizedBox(height: 10),
                 GestureDetector(
                   onTap: () async {
-                    ToastNotification.success(
-                      context: context,
-                      title: 'APOD adicionado a não gostei!',
-                      icon: const Icon(LucideIcons.heartCrack),
-                    );
-
                     final ApodModel item = details.copyWith(
                       reaction: ApodReaction.unlike,
                     );
@@ -100,7 +102,21 @@ class HomeBanner extends StatelessWidget {
                       onAddCallback!();
                     }
 
-                    await viewModel.add(item: item);
+                    final bool status = await viewModel.add(item: item);
+
+                    if (status) {
+                      ToastNotification.success(
+                        context: context,
+                        title: 'APOD adicionado a não gostei!',
+                        icon: const Icon(LucideIcons.heart),
+                      );
+                    } else {
+                      ToastNotification.error(
+                        context: context,
+                        title: 'Já existente nos favoritos!',
+                        icon: const Icon(LucideIcons.info),
+                      );
+                    }
                   },
                   child: const Icon(
                     LucideIcons.heartCrack,

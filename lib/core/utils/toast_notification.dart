@@ -15,4 +15,17 @@ class ToastNotification {
         title: Text(title ?? ''),
         icon: icon,
       );
+  static void error({
+    required BuildContext context,
+    String? title,
+    Icon? icon,
+  }) =>
+      toastification.show(
+        context: context,
+        type: ToastificationType.error,
+        style: ToastificationStyle.fillColored,
+        autoCloseDuration: const Duration(seconds: 5),
+        title: Text(title ?? ''),
+        icon: icon,
+      );
 }

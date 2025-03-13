@@ -7,36 +7,43 @@ class HomeChipComponent extends StatelessWidget {
   const HomeChipComponent({
     super.key,
     required this.chipDetail,
+    this.onTapCallback,
     this.active = false,
   });
 
   final bool active;
   final HomeChipModel chipDetail;
 
+  final Function(HomeChipModel)? onTapCallback;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: active ? AppColors.blue : AppColors.grey,
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            chipDetail.icon,
-            color: _activeColor(),
-          ),
-          const SizedBox(width: 10),
-          Text(
-            chipDetail.title,
-            style: TextStyle(color: _activeColor()),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        if (onTapCallback != null) {
+          onTapCallback!(chipDetail);
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.only(left: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: active ? AppColors.blue : AppColors.grey,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Row(
+          children: [
+            Icon(chipDetail.icon, color: _activeColor()),
+            const SizedBox(width: 10),
+            Text(
+              chipDetail.title,
+              style: TextStyle(color: _activeColor()),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Color _activeColor() => active ? Colors.white : AppColors.lightGrey;
+  Color _activeColor() => active ? Colors.white : AppColors.blue;
 }

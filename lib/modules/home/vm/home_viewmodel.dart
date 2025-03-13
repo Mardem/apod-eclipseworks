@@ -9,9 +9,7 @@ import '../data/models/remote/repository/home_repository.dart';
 
 class HomeViewModel extends BaseViewModel {
   final BehaviorSubject<ApodModel> _apod = BehaviorSubject<ApodModel>();
-
   Stream<ApodModel> get apod => _apod.stream;
-
   void setApod(ApodModel value) => _apod.add(value);
 
   final HomeRepository repository = inject<HomeRepository>();
@@ -28,7 +26,9 @@ class HomeViewModel extends BaseViewModel {
     setLoading(false);
   }
 
-  Future<void> add({required ApodModel item}) async => favoriteService.add(
-        item: item,
-      );
+  Future<bool> add({required ApodModel item}) async {
+    return await favoriteService.add(
+      item: item,
+    );
+  }
 }

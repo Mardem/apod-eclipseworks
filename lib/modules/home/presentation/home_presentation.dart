@@ -6,17 +6,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../design_system/components/input.dart';
+import '../../../design_system/design_system.dart';
 import '../../favorites/routes/favorites_routes.dart';
 import '../../favorites/vm/favorites_viewmodel.dart';
+import '../data/models/remote/enums/apod_reaction.dart';
 import '../data/models/remote/mapper/apod_mapper.dart';
 import 'components/home_banner.dart';
 import 'components/home_card.dart';
 import 'components/home_chip.dart';
 import 'shimmer/home_banner_shimmer.dart';
 import 'utils/home_chip.dart';
+import 'utils/home_chip_model.dart';
 
 class HomePresentation extends StatefulWidget {
   const HomePresentation({super.key});
@@ -47,99 +51,154 @@ class _HomePresentationState extends State<HomePresentation> {
             final bool isLoading = loadingSnapshot.data ?? false;
 
             return SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: ListView(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xffb3cbff).withOpacity(.4),
+                          offset: const Offset(0, 2),
+                          blurRadius: 9,
+                          spreadRadius: 3,
+                        ),
+                      ],
+                    ),
+                    child: Column(
                       children: [
-                        const Text('Olá, Eclipse!'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Olá, Eclipse!'),
+                            GestureDetector(
+                              onTap: () {
+                                router.navigateTo(
+                                  context,
+                                  FavoritesRoutesPath.favorites.path,
+                                );
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: AppColors.blue,
+                                child: const Icon(
+                                  LucideIcons.heart,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
                         GestureDetector(
-                          onTap: () {
-                            router.navigateTo(
-                              context,
-                              FavoritesRoutesPath.favorites.path,
-                            );
-                          },
-                          child: const CircleAvatar(
-                            child: Text('E'),
+                          onTap: () => _openDatePicker(),
+                          child: const AbsorbPointer(
+                            child: AppInput(
+                              hintText: 'Selecione uma data',
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: () => _openDatePicker(),
-                      child: const AbsorbPointer(
-                        child: AppInput(
-                          hintText: 'Selecione uma data',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
                       'APOD de Hoje',
                       style: GoogleFonts.playfair(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: const Color.fromRGBO(1, 1, 1, 1)),
                     ),
-                    StreamBuilder<List<dynamic>>(
-                      stream: CombineLatestStream.list([
-                        viewModel.loading,
-                        viewModel.apod,
-                      ]),
-                      initialData: const [false, null],
-                      builder: (
-                        BuildContext context,
-                        AsyncSnapshot<List<dynamic>> snapshot,
-                      ) {
-                        final bool isLoading = snapshot.data?[0];
-                        final ApodModel? banner = snapshot.data?[1];
+                  ),
+                  StreamBuilder<List<dynamic>>(
+                    stream: CombineLatestStream.list([
+                      viewModel.loading,
+                      viewModel.apod,
+                    ]),
+                    initialData: const [false, null],
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<List<dynamic>> snapshot,
+                    ) {
+                      final bool isLoading = snapshot.data?[0];
+                      final ApodModel? banner = snapshot.data?[1];
 
-                        if (banner == null || isLoading) {
-                          return const HomeBannerShimmer();
-                        }
+                      if (banner == null || isLoading) {
+                        return const HomeBannerShimmer();
+                      }
 
-                        return HomeBanner(
-                          details: banner,
-                          viewModel: viewModel,
-                          onAddCallback: () async {
-                            await favoritesViewmodel.loadFavorites();
-                          },
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
+                      return HomeBanner(
+                        details: banner,
+                        viewModel: viewModel,
+                        onAddCallback: () async {
+                          await favoritesViewmodel.loadFavorites();
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
                       'Últimos favoritos',
                       style: GoogleFonts.playfair(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Container(
-                      height: 40,
-                      margin: const EdgeInsets.only(top: 8),
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: HomeChip.chips().length,
-                        itemBuilder: (
-                          BuildContext context,
-                          int index,
-                        ) =>
-                            HomeChipComponent(
-                          chipDetail: HomeChip.chips()[index],
-                        ),
-                      ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: StreamBuilder<ApodReaction>(
+                      stream: favoritesViewmodel.favoriteFilter,
+                      builder: (context, snapshot) {
+                        return Container(
+                          height: 40,
+                          margin: const EdgeInsets.only(top: 8),
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: HomeChip.chips().length,
+                            itemBuilder: (
+                              BuildContext context,
+                              int index,
+                            ) {
+                              final chip = HomeChip.chips()[index];
+
+                              return HomeChipComponent(
+                                chipDetail: chip,
+                                active: snapshot.data == chip.type,
+                                onTapCallback: (HomeChipModel item) async =>
+                                    favoritesViewmodel.filterFavoritesChip(
+                                  chip: item,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
-                    const SizedBox(height: 16),
-                    StreamBuilder<List<ApodModel>>(
+                  ),
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: StreamBuilder<List<ApodModel>>(
                       stream: favoritesViewmodel.apod,
                       builder: (context, snapshot) {
                         if (snapshot.data == null || snapshot.data!.isEmpty) {
-                          return const SizedBox.shrink();
+                          return const Center(
+                            child: Column(
+                              children: [
+                                Icon(LucideIcons.frown),
+                                Text('Nenhum favorito por aqui...'),
+                              ],
+                            ),
+                          );
                         }
 
                         return SizedBox(
@@ -158,9 +217,10 @@ class _HomePresentationState extends State<HomePresentation> {
                           ),
                         );
                       },
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                ],
               ),
             );
           },
