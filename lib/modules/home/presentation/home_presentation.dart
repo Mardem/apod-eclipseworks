@@ -13,11 +13,14 @@ import '../../../design_system/components/input.dart';
 import '../../../design_system/design_system.dart';
 import '../../favorites/routes/favorites_routes.dart';
 import '../../favorites/vm/favorites_viewmodel.dart';
+import '../data/models/remote/enums/apod_media_type.dart';
 import '../data/models/remote/enums/apod_reaction.dart';
 import '../data/models/remote/mapper/apod_mapper.dart';
 import 'components/home_banner.dart';
 import 'components/home_card.dart';
 import 'components/home_chip.dart';
+import 'components/home_favorite_video_card.dart';
+import 'components/home_video_banner.dart';
 import 'shimmer/home_banner_shimmer.dart';
 import 'utils/home_chip.dart';
 import 'utils/home_chip_model.dart';
@@ -48,8 +51,6 @@ class _HomePresentationState extends State<HomePresentation> {
         child: StreamBuilder<bool>(
           stream: viewModel.loading,
           builder: (BuildContext context, AsyncSnapshot<bool> loadingSnapshot) {
-            final bool isLoading = loadingSnapshot.data ?? false;
-
             return SafeArea(
               child: ListView(
                 children: [
@@ -111,9 +112,10 @@ class _HomePresentationState extends State<HomePresentation> {
                     child: Text(
                       'APOD de Hoje',
                       style: GoogleFonts.playfair(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: const Color.fromRGBO(1, 1, 1, 1)),
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: const Color.fromRGBO(1, 1, 1, 1),
+                      ),
                     ),
                   ),
                   StreamBuilder<List<dynamic>>(
@@ -133,12 +135,19 @@ class _HomePresentationState extends State<HomePresentation> {
                         return const HomeBannerShimmer();
                       }
 
+                      if (banner.mediaType == ApodMediaType.video) {
+                        return HomeVideoBanner(
+                          details: banner,
+                          onAddCallback: () async =>
+                              await favoritesViewmodel.loadFavorites(),
+                        );
+                      }
+
                       return HomeBanner(
                         details: banner,
                         viewModel: viewModel,
-                        onAddCallback: () async {
-                          await favoritesViewmodel.loadFavorites();
-                        },
+                        onAddCallback: () async =>
+                            await favoritesViewmodel.loadFavorites(),
                       );
                     },
                   ),
@@ -207,11 +216,13 @@ class _HomePresentationState extends State<HomePresentation> {
                             scrollDirection: Axis.horizontal,
                             itemCount: snapshot.data!.length,
                             itemBuilder: (BuildContext context, int index) {
+                              final ApodModel details = snapshot.data![index];
+
                               return Container(
                                 margin: const EdgeInsets.only(right: 18),
-                                child: HomeImageCard(
-                                  details: snapshot.data![index],
-                                ),
+                                child: details.mediaType == ApodMediaType.image
+                                    ? HomeImageCard(details: details)
+                                    : HomeFavoriteVideoCard(details: details),
                               );
                             },
                           ),

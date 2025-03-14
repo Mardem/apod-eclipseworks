@@ -1,59 +1,54 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:eclipseworks_apod/core/utils/toast_notification.dart';
+import 'package:eclipseworks_apod/main.dart';
+import 'package:eclipseworks_apod/modules/home/data/models/remote/enums/apod_reaction.dart';
+import 'package:eclipseworks_apod/modules/home/data/models/remote/mapper/apod_mapper.dart';
+import 'package:eclipseworks_apod/modules/home/presentation/components/home_modal_info.dart';
+import 'package:eclipseworks_apod/modules/home/vm/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
-import '../../data/models/remote/enums/apod_reaction.dart';
-import '../../data/models/remote/mapper/apod_mapper.dart';
-import '../../vm/home_viewmodel.dart';
-import 'home_modal_info.dart';
-
-class HomeBanner extends StatelessWidget {
-  const HomeBanner({
+class HomeVideoBanner extends StatefulWidget {
+  const HomeVideoBanner({
     super.key,
     required this.details,
-    required this.viewModel,
     this.onAddCallback,
+    this.disableButtons = false,
   });
 
   final ApodModel details;
-  final HomeViewModel viewModel;
   final VoidCallback? onAddCallback;
+  final bool disableButtons;
+
+  @override
+  State<HomeVideoBanner> createState() => _HomeVideoBannerState();
+}
+
+class _HomeVideoBannerState extends State<HomeVideoBanner> {
+  final HomeViewModel viewModel = inject<HomeViewModel>();
+
+  final _controller = YoutubePlayerController(
+    params: const YoutubePlayerParams(
+      mute: false,
+      showControls: true,
+      showFullscreenButton: true,
+    ),
+  );
+
+  @override
+  void initState() {
+    _controller.loadVideoByUrl(
+      mediaContentUrl: widget.details.url,
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 300,
-      width: MediaQuery.of(context).size.width,
-      child: Stack(
-        children: [
-          CachedNetworkImage(
-            fit: BoxFit.cover,
-            width: MediaQuery.of(context).size.width,
-            height: 300,
-            imageUrl: details.url,
-          ),
-          Positioned(
-            child: GestureDetector(
-              onTap: () => showImageViewer(
-                context,
-                CachedNetworkImageProvider(details.hdUrl),
-                useSafeArea: true,
-                swipeDismissible: true,
-                doubleTapZoomable: true,
-              ),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 300,
-                color: Colors.black.withOpacity(.2),
-                child: Icon(
-                  LucideIcons.zoomIn,
-                  color: Colors.grey.shade200,
-                ),
-              ),
-            ),
-          ),
+    return Stack(
+      children: [
+        YoutubePlayer(controller: _controller),
+        if (!widget.disableButtons)
           Positioned(
             right: 4,
             top: 8,
@@ -87,7 +82,7 @@ class HomeBanner extends StatelessWidget {
                   onTap: () => showModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) => HomeModalInfo(
-                      details: details,
+                      details: widget.details,
                     ),
                   ),
                   child: const Icon(
@@ -100,8 +95,7 @@ class HomeBanner extends StatelessWidget {
               ],
             ),
           ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -109,12 +103,12 @@ class HomeBanner extends StatelessWidget {
     BuildContext context, {
     required ApodReaction reaction,
   }) async {
-    final ApodModel item = details.copyWith(
+    final ApodModel item = widget.details.copyWith(
       reaction: reaction,
     );
 
-    if (onAddCallback != null) {
-      onAddCallback!();
+    if (widget.onAddCallback != null) {
+      widget.onAddCallback!();
     }
 
     final bool status = await viewModel.add(item: item);

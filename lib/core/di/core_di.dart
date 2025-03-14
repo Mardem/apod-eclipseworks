@@ -13,6 +13,6 @@ Future<void> startModules() async {
   await localStorage.init();
   inject.registerSingleton<LocalStorage>(localStorage);
 
-  startHomeModule();
   startFavoritesModule();
+  startHomeModule();
 }
