@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:eclipseworks_apod/core/utils/toast_notification.dart';
+import 'package:eclipseworks_apod/main.dart';
+import 'package:eclipseworks_apod/modules/favorites/vm/favorites_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -14,12 +16,10 @@ class HomeBanner extends StatelessWidget {
     super.key,
     required this.details,
     required this.viewModel,
-    this.onAddCallback,
   });
 
   final ApodModel details;
   final HomeViewModel viewModel;
-  final VoidCallback? onAddCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -109,15 +109,13 @@ class HomeBanner extends StatelessWidget {
     BuildContext context, {
     required ApodReaction reaction,
   }) async {
+    final FavoritesViewmodel favoritesViewmodel = inject<FavoritesViewmodel>();
     final ApodModel item = details.copyWith(
       reaction: reaction,
     );
 
-    if (onAddCallback != null) {
-      onAddCallback!();
-    }
-
     final bool status = await viewModel.add(item: item);
+    await favoritesViewmodel.loadFavorites();
 
     if (status) {
       ToastNotification.success(

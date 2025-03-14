@@ -11,5 +11,5 @@ void startFavoritesModule() {
   /// Repositories
 
   /// ViewModels
-  inject.registerFactory<FavoritesViewmodel>(() => FavoritesViewmodel());
+  inject.registerSingleton<FavoritesViewmodel>(FavoritesViewmodel());
 }

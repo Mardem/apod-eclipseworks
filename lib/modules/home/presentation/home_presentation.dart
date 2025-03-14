@@ -138,16 +138,12 @@ class _HomePresentationState extends State<HomePresentation> {
                       if (banner.mediaType == ApodMediaType.video) {
                         return HomeVideoBanner(
                           details: banner,
-                          onAddCallback: () async =>
-                              await favoritesViewmodel.loadFavorites(),
                         );
                       }
 
                       return HomeBanner(
                         details: banner,
                         viewModel: viewModel,
-                        onAddCallback: () async =>
-                            await favoritesViewmodel.loadFavorites(),
                       );
                     },
                   ),
