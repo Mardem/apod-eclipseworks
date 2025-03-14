@@ -10,12 +10,11 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../design_system/components/input.dart';
-import '../../../design_system/design_system.dart';
-import '../../favorites/routes/favorites_routes.dart';
 import '../../favorites/vm/favorites_viewmodel.dart';
 import '../data/models/remote/enums/apod_media_type.dart';
 import '../data/models/remote/enums/apod_reaction.dart';
 import '../data/models/remote/mapper/apod_mapper.dart';
+import 'components/home_appbar.dart';
 import 'components/home_banner.dart';
 import 'components/home_card.dart';
 import 'components/home_chip.dart';
@@ -73,27 +72,7 @@ class _HomePresentationState extends State<HomePresentation> {
                     ),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text('Olá, Eclipse!'),
-                            GestureDetector(
-                              onTap: () {
-                                router.navigateTo(
-                                  context,
-                                  FavoritesRoutesPath.favorites.path,
-                                );
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: AppColors.blue,
-                                child: const Icon(
-                                  LucideIcons.heart,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        const HomeAppBar(),
                         const SizedBox(height: 8),
                         GestureDetector(
                           onTap: () => _openDatePicker(),
