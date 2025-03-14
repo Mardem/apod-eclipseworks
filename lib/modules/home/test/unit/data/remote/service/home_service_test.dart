@@ -11,7 +11,7 @@ import 'package:mocktail/mocktail.dart';
 
 void main() {
   group(
-    'Testing Homer Request With Success',
+    'Testing Home Request With Success',
     () {
       late HomeService service;
       late HttpClient mockClient;
